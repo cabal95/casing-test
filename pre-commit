@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+
+# Redirect output to stderr.
+exec 1>&2
+
+badfiles=`git diff --staged --name-only --diff-filter=ACR | grep -v '^Rock/Model/' | grep -E '/(CMS|CRM)/'`
+
+if [ -n "$badfiles" ]; then
+    cat <<EOF
+Error: Attempt to commit incorrect filename casing.
+
+$badfiles
+EOF
+
+    exit 1
+fi
